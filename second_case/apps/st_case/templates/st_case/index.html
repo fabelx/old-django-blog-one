@@ -1,0 +1,12 @@
+{% extends 'st_case/base_st_case.html' %}
+
+{% block title %}
+    Posts list
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-5">Posts:</h1>
+    {% for post in posts %}
+       {% include 'st_case/includes/post_card_template.html' %}
+    {% endfor %}
+{% endblock %}
