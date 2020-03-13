@@ -4,7 +4,6 @@
     Create Post - {{ block.super }}
 {% endblock %}
 
-
 {% block content %}
     <form class="" action="{% url 'post_create_url' %}" method="post">
         {% csrf_token %}
@@ -22,6 +21,4 @@
 
         <button type="submit" class="btn mt-3 btn-outline-success">Create Post</button>
     </form>
-
-
 {% endblock %}

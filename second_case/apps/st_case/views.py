@@ -4,7 +4,7 @@ from django.views.generic import View
 
 from .forms import TagForm, PostForm
 from .models import Tag, Post
-from .uttils import ObjectDetaiMixin, ObjectCreateMixin
+from .uttils import ObjectDetaiMixin, ObjectCreateMixin, ObjectUpdateMixin
 
 
 class PostDetail(ObjectDetaiMixin, View):
@@ -53,3 +53,31 @@ def index(request):
 def tags_list(request):
     tags = Tag.objects.all()
     return render(request, 'st_case/tags_list.html', context={'tags': tags})
+
+
+class TagUpdate(ObjectUpdateMixin, View):
+    model = Tag
+    model_form = TagForm
+    template = 'st_case/tag_update_form.html'
+    # def get(self, request, slug):
+    #     tag = Tag.objects.get(slug__iexact=slug)
+    #     bound_form = TagForm(instance=tag)
+    #     return render(request, 'st_case/tag_update_form.html', context={'form': bound_form, 'tag': tag})
+    #
+    # def post(self, request, slug):
+    #     tag = Tag.objects.get(slug__iexact=slug)
+    #     bound_form = TagForm(request.POST, instance=tag)
+    #     if bound_form.is_valid():
+    #         new_tag = bound_form.save()
+    #         return redirect(new_tag)
+    #     return render(request, 'st_case/tag_update_form.html', context={'form': bound_form, 'tag': tag})
+
+
+
+class PostUpdate(ObjectUpdateMixin, View):
+    model = Post
+    model_form = PostForm
+    template = 'st_case/post_update_form.html'
+
+
+
