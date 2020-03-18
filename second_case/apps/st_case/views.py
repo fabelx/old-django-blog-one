@@ -1,7 +1,8 @@
-from django.shortcuts import redirect
+# from django.shortcuts import redirect
 from django.shortcuts import render
-from django.urls import reverse
+# from django.urls import reverse
 from django.views.generic import View
+from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TagForm, PostForm
@@ -91,7 +92,28 @@ class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
 
 def index(request):
     posts = Post.objects.all()
-    return render(request, 'st_case/index.html', context={'posts': posts})
+    paginator = Paginator(posts, 2)
+    page_num = request.GET.get('page', 1)
+    page = paginator.get_page(page_num)
+
+    is_paginated = page.has_other_pages()
+    if page.has_previous():
+        previous_page_url = f'?page={page.previous_page_number()}'
+    else:
+        previous_page_url = ''
+
+    if page.has_next():
+        next_page_url = f'?page={page.next_page_number()}'
+    else:
+        next_page_url = ''
+
+    context = {
+        'page': page,
+        'is_paginated': is_paginated,
+        'next_page_url': next_page_url,
+        'previous_page_url': previous_page_url
+    }
+    return render(request, 'st_case/index.html', context=context)
 
 
 def tags_list(request):
