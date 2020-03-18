@@ -1,7 +1,8 @@
+from time import time
+
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
-from time import time
 
 
 def gen_slug(s):
@@ -34,7 +35,7 @@ class Post(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['date_pub']
+        ordering = ['-date_pub']
 
 
 class Tag(models.Model):

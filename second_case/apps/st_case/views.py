@@ -1,9 +1,10 @@
 # from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.shortcuts import render
 # from django.urls import reverse
 from django.views.generic import View
-from django.core.paginator import Paginator
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from .forms import TagForm, PostForm
 from .models import Tag, Post
@@ -91,11 +92,15 @@ class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
 
 
 def index(request):
-    posts = Post.objects.all()
+    search_query = request.GET.get('search_query', '')
+    if search_query:
+        posts = Post.objects.filter(Q(title__contains=search_query) | Q(body__contains=search_query))
+    else:
+        posts = Post.objects.all()
+
     paginator = Paginator(posts, 2)
     page_num = request.GET.get('page', 1)
     page = paginator.get_page(page_num)
-
     is_paginated = page.has_other_pages()
     if page.has_previous():
         previous_page_url = f'?page={page.previous_page_number()}'
